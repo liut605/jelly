@@ -1,0 +1,19 @@
+Scope: all 9 workspace projects
+Lockfile is up to date, resolution step is skipped
+Progress: resolved 1, reused 0, downloaded 0, added 0
+Packages: +508
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Progress: resolved 508, reused 508, downloaded 0, added 36
+Progress: resolved 508, reused 508, downloaded 0, added 380
+Progress: resolved 508, reused 508, downloaded 0, added 454
+Progress: resolved 508, reused 508, downloaded 0, added 508, done
+.../esbuild@0.28.2/node_modules/esbuild postinstall$ node install.js
+.../esbuild@0.28.2/node_modules/esbuild postinstall: Done
+
+devDependencies:
++ prettier 3.9.6
++ typescript 5.9.3
+
+. preinstall$ node scripts/check-package-manager.cjs
+. preinstall: Done
+Done in 5.1s using pnpm v10.18.3

@@ -1,0 +1,53 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Jelly optics verification</title>
+    <style>
+      body {
+        background: #f5f2eb;
+        font: 14px monospace;
+        padding: 20px;
+      }
+      pre {
+        white-space: pre-wrap;
+      }
+      .playground-shell {
+        position: relative;
+        background: #f5f2eb;
+        width: 320px;
+        height: 240px;
+      }
+      .specimen-heading {
+        position: absolute;
+        left: 12px;
+        top: 25px;
+        font: 700 55px sans-serif;
+        color: #781d18;
+      }
+      .specimen-caption {
+        position: absolute;
+        top: 175px;
+        font: 15px sans-serif;
+        color: #30332b;
+      }
+      #capture {
+        position: absolute;
+        inset: 0;
+      }
+      canvas {
+        max-width: 320px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Jelly optics verification</h1>
+    <pre id="results">Starting…</pre>
+    <section class="playground-shell">
+      <h2 class="specimen-heading">PEACH 寿桃</h2>
+      <p class="specimen-caption">Soft frosted jelly</p>
+      <div id="capture"></div>
+    </section>
+    <script type="module" src="./optics-gpu.ts"></script>
+  </body>
+</html>

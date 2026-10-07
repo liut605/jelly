@@ -1,0 +1,21 @@
+
+> @workspace/jelly-study@0.0.0 build /Users/tsingliu/Desktop/MFA DT/jelly-study/local/artifacts/jelly-study
+> vite build --config vite.config.ts
+
+vite v7.3.6 building client environment for production...
+transforming...
+[plugin vite:resolve] Module "node:module" has been externalized for browser compatibility, imported by "/Users/tsingliu/Desktop/MFA DT/jelly-study/local/node_modules/.pnpm/manifold-3d@3.5.4_@types+node@25.9.6/node_modules/manifold-3d/manifold.js". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+✓ 1702 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/public/index.html                         1.40 kB │ gzip:   0.51 kB
+dist/public/assets/munch.worker-B0iBd1--.js  179.81 kB
+dist/public/assets/manifold-BE4c7gO-.wasm    541.47 kB │ gzip: 205.86 kB
+dist/public/assets/index-CSs55oT8.css         84.90 kB │ gzip:  16.36 kB
+dist/public/assets/index-BMuItt3J.js         788.68 kB │ gzip: 222.54 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 2.65s

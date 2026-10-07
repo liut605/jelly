@@ -1,0 +1,43 @@
+{
+  "input": "attached_assets/tea-set-original.glb",
+  "output": "attached_assets/tea-set-web.glb",
+  "sourceSha256": "1a55c5a8a82f9de94fbe8d5c48ae1b0011a687b0a98bd2ccc97d0ae9097ea4fb",
+  "originalBytes": 67178908,
+  "bytes": 31790712,
+  "lossless": true,
+  "verifiedGeometryBuffers": 8,
+  "totalTriangles": 1919469,
+  "parts": [
+    {
+      "name": "Teapot",
+      "triangles": 1545715,
+      "vertices": 946303,
+      "min": [
+        -0.4899292588233948,
+        0,
+        -0.2795105278491974
+      ],
+      "max": [
+        0.2153320610523224,
+        0.768951416015625,
+        0.2795105278491974
+      ]
+    },
+    {
+      "name": "Teacup",
+      "triangles": 373754,
+      "vertices": 231328,
+      "min": [
+        0.1867981106042862,
+        0.008392333984375,
+        -0.15644830465316772
+      ],
+      "max": [
+        0.4899292588233948,
+        0.2021484375,
+        0.13963326811790466
+      ]
+    }
+  ],
+  "segmentation": "Two spatially connected objects identified across coincident UV seams. No triangle removal, decimation, texture re-encoding or normal changes."
+}

@@ -1,0 +1,944 @@
+@import "tailwindcss";
+
+:root {
+  font-family: "Outfit", sans-serif;
+  color: #313a33;
+  background: var(--ground);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  --ground: #f5f2eb;
+  --ink: #313a33;
+  --muted: #5f6b60;
+  --line: rgba(48, 59, 49, 0.25);
+  --glass: rgba(255, 253, 247, 0.82);
+  --mono: "DM Mono", monospace;
+  --sans: "Outfit", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+html,
+body,
+#root {
+  width: 100%;
+  min-width: 0;
+  min-height: 100%;
+  margin: 0;
+}
+body {
+  min-height: 100dvh;
+  overflow: hidden;
+  background: var(--ground);
+}
+button {
+  font: inherit;
+}
+button:focus-visible {
+  outline: 2px solid #f4e5bd;
+  outline-offset: 3px;
+}
+::selection {
+  color: #29352c;
+  background: #e9c8a7;
+}
+
+.study-shell {
+  position: relative;
+  width: 100%;
+  height: 100dvh;
+  min-height: 0;
+  overflow: hidden;
+  isolation: isolate;
+  background: var(--ground);
+}
+.study-shell::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 8;
+  opacity: 0.04;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.84' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.18'/%3E%3C/svg%3E");
+}
+.brand-bar {
+  position: absolute;
+  z-index: 5;
+  inset: 0 0 auto;
+  height: 63px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 38px;
+  border-bottom: 1px solid var(--line);
+}
+.brand-mark,
+.brand-edition,
+.brand-status {
+  font-family: var(--mono);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 10px;
+}
+.brand-mark {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 500;
+}
+.mark-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #e8c8a1;
+  box-shadow: inset -1px -1px 2px rgba(80, 50, 32, 0.24);
+}
+.brand-edition {
+  opacity: 0.65;
+}
+.brand-status {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  color: #435248;
+}
+.status-point {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #647b62;
+}
+.title-block {
+  position: absolute;
+  z-index: 1;
+  top: 111px;
+  left: 5.05vw;
+  color: var(--ink);
+  pointer-events: none;
+  user-select: none;
+  line-height: 0.79;
+  letter-spacing: -0.075em;
+  font-size: clamp(72px, 10.15vw, 154px);
+  font-weight: 800;
+  text-transform: uppercase;
+}
+.title-block span {
+  display: block;
+}
+.title-block span + span {
+  margin-top: 0.065em;
+}
+.selection {
+  position: absolute;
+  z-index: 5;
+  top: 89px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 9px;
+  white-space: nowrap;
+}
+.selection-label {
+  font-family: var(--mono);
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.17em;
+  color: rgba(49, 58, 51, 0.68);
+}
+.fruit-list {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.fruit-pill {
+  min-height: 29px;
+  padding: 0 11px;
+  border: 1px solid rgba(49, 58, 51, 0.24);
+  border-radius: 999px;
+  background: rgba(242, 239, 221, 0.28);
+  color: #39453b;
+  font-size: 11px;
+  letter-spacing: 0.015em;
+  cursor: pointer;
+  transition:
+    background-color 0.18s ease,
+    border-color 0.18s ease,
+    color 0.18s ease;
+}
+.fruit-pill:hover {
+  background: rgba(247, 241, 223, 0.56);
+  border-color: rgba(49, 58, 51, 0.48);
+}
+.fruit-pill[aria-pressed="true"] {
+  background: #e7e3ce;
+  border-color: rgba(49, 58, 51, 0.46);
+}
+.fruit-pill:disabled {
+  cursor: not-allowed;
+}
+.fruit-pill:disabled:not([aria-pressed="true"]) {
+  opacity: 0.46;
+}
+.canvas-stage {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  overflow: hidden;
+  contain: paint;
+  touch-action: none;
+  cursor: grab;
+}
+.canvas-stage:active {
+  cursor: grabbing;
+}
+.canvas-stage[data-hand="off"] {
+  cursor: grab;
+}
+.canvas-stage[data-grabbing="true"] {
+  cursor: grabbing;
+}
+.canvas-stage canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  outline: none;
+}
+.specimen-note {
+  position: absolute;
+  z-index: 5;
+  right: 39px;
+  bottom: 112px;
+  width: 208px;
+  color: #455247;
+}
+.specimen-note .note-number {
+  display: block;
+  padding-bottom: 9px;
+  border-bottom: 1px solid var(--line);
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+.specimen-note p {
+  margin: 9px 0 0;
+  font-size: 12px;
+  line-height: 1.5;
+}
+.specimen-note strong {
+  color: #313a33;
+  font-weight: 600;
+}
+.toolbar {
+  position: absolute;
+  z-index: 6;
+  left: 50%;
+  bottom: 27px;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 5px;
+  border: 1px solid rgba(255, 250, 230, 0.48);
+  border-radius: 7px;
+  background: var(--glass);
+  box-shadow:
+    0 7px 26px rgba(52, 62, 46, 0.08),
+    inset 0 1px rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(14px);
+}
+.tool-button {
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 4px;
+  color: #344037;
+  background: transparent;
+  font-size: 11px;
+  cursor: pointer;
+}
+.tool-button svg {
+  width: 14px;
+  height: 14px;
+  stroke-width: 1.6;
+}
+.tool-button:hover:not(:disabled) {
+  background: rgba(63, 76, 60, 0.09);
+}
+.tool-button[data-active="true"] {
+  color: #28372b;
+  background: rgba(94, 124, 89, 0.14);
+}
+.tool-button:disabled {
+  color: rgba(55, 64, 55, 0.42);
+  cursor: not-allowed;
+}
+.tool-divider {
+  width: 1px;
+  height: 20px;
+  margin: 0 3px;
+  background: rgba(49, 58, 51, 0.2);
+}
+.physics-panel {
+  position: absolute;
+  z-index: 6;
+  left: 39px;
+  top: clamp(310px, 43vh, 390px);
+  width: 242px;
+  padding: 13px 14px 11px;
+  border: 1px solid rgba(255, 250, 230, 0.62);
+  border-radius: 6px;
+  color: #344037;
+  background: rgba(247, 245, 235, 0.72);
+  box-shadow:
+    0 6px 22px rgba(52, 62, 46, 0.055),
+    inset 0 1px rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(12px);
+}
+.physics-panel-heading {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 7px;
+  margin-bottom: 10px;
+  font-size: 12px;
+  font-weight: 600;
+}
+.physics-status-badge {
+  max-width: 100%;
+  padding: 4px 6px;
+  border-radius: 3px;
+  font-family: var(--mono);
+  font-size: 8px;
+  font-weight: 400;
+  letter-spacing: 0.045em;
+  line-height: 1.4;
+}
+.physics-status-badge.ready {
+  color: #39583b;
+  background: rgba(115, 157, 111, 0.15);
+}
+.physics-status-badge.still {
+  color: #725735;
+  background: rgba(205, 166, 104, 0.18);
+}
+.physics-status-badge.checking {
+  color: #5d655d;
+  background: rgba(99, 111, 95, 0.1);
+}
+.physics-range {
+  display: block;
+  margin-top: 9px;
+}
+.physics-range > span {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 4px;
+  font-size: 10px;
+}
+.physics-range output {
+  color: rgba(49, 58, 51, 0.65);
+  font-family: var(--mono);
+  font-size: 9px;
+}
+.physics-range input {
+  display: block;
+  width: 100%;
+  height: 14px;
+  margin: 0;
+  accent-color: #8d9d76;
+  cursor: pointer;
+}
+.physics-range input:disabled {
+  cursor: not-allowed;
+  opacity: 0.46;
+}
+.physics-panel-hint {
+  margin: 9px 0 0;
+  color: rgba(49, 58, 51, 0.65);
+  font-size: 9px;
+  line-height: 1.45;
+}
+.toolbar-hint {
+  position: absolute;
+  z-index: 5;
+  left: 39px;
+  bottom: 39px;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  color: rgba(49, 58, 51, 0.61);
+}
+.corner-index {
+  position: absolute;
+  z-index: 5;
+  right: 39px;
+  top: 82px;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  color: rgba(49, 58, 51, 0.6);
+}
+
+.settings-toggle,
+.settings-close {
+  display: none;
+}
+body {
+  overscroll-behavior: none;
+}
+button {
+  touch-action: manipulation;
+}
+button:focus-visible,
+input:focus-visible {
+  outline: 2px solid #485f48;
+  outline-offset: 3px;
+}
+.canvas-stage {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+@media (max-width: 760px), (max-height: 500px) and (max-width: 1000px) {
+  .study-shell {
+    min-height: 0;
+    --dock-height: 114px;
+  }
+  .brand-bar {
+    height: calc(52px + env(safe-area-inset-top, 0px));
+    padding: env(safe-area-inset-top, 0px)
+      max(16px, env(safe-area-inset-right, 0px)) 0
+      max(16px, env(safe-area-inset-left, 0px));
+  }
+  .brand-edition {
+    display: none;
+  }
+  .brand-status {
+    font-size: 8px;
+  }
+  .title-block {
+    top: calc(128px + env(safe-area-inset-top, 0px));
+    left: 16px;
+    font-size: clamp(58px, 16.6vw, 104px);
+  }
+  .selection {
+    top: calc(64px + env(safe-area-inset-top, 0px));
+    gap: 5px;
+  }
+  .fruit-pill {
+    min-height: 38px;
+    padding: 0 14px;
+    font-size: 11px;
+  }
+  .corner-index {
+    display: none;
+  }
+  .toolbar {
+    bottom: calc(10px + env(safe-area-inset-bottom, 0px));
+    width: calc(
+      100% - 24px - env(safe-area-inset-left, 0px) -
+        env(safe-area-inset-right, 0px)
+    );
+    max-width: 540px;
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 2px;
+    padding: 5px;
+  }
+  .tool-divider {
+    display: none;
+  }
+  .tool-button {
+    min-width: 44px;
+    height: 50px;
+    padding: 4px 2px;
+    gap: 4px;
+    flex-direction: column;
+    font-size: 10px;
+  }
+  .tool-button svg {
+    width: 18px;
+    height: 18px;
+  }
+  .tool-button span {
+    display: block;
+  }
+  .settings-toggle {
+    display: flex;
+  }
+  .settings-close {
+    display: flex;
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    width: 44px;
+    height: 44px;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    background: transparent;
+    color: var(--ink);
+    border-radius: 4px;
+  }
+  .settings-close svg {
+    width: 20px;
+    height: 20px;
+  }
+  .physics-panel {
+    top: auto;
+    bottom: calc(var(--dock-height) + 20px + env(safe-area-inset-bottom, 0px));
+    left: 12px;
+    width: calc(100% - 24px);
+    max-height: calc(
+      100dvh - 220px - env(safe-area-inset-top, 0px) -
+        env(safe-area-inset-bottom, 0px)
+    );
+    padding: 16px;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    background: rgba(247, 245, 235, 0.97);
+  }
+  .physics-panel[data-expanded="false"] {
+    display: none;
+  }
+  .physics-panel-heading {
+    padding-right: 32px;
+  }
+  .physics-status-badge {
+    font-size: 9px;
+  }
+  .physics-range {
+    margin-top: 8px;
+  }
+  .physics-range > span {
+    font-size: 12px;
+    margin-bottom: 0;
+  }
+  .physics-range input {
+    height: 44px;
+    touch-action: pan-x;
+  }
+  .physics-range output {
+    font-size: 11px;
+  }
+  .physics-panel-hint {
+    font-size: 11px;
+    margin-top: 6px;
+  }
+  .toolbar-hint {
+    left: 16px;
+    right: 16px;
+    bottom: calc(var(--dock-height) + 22px + env(safe-area-inset-bottom, 0px));
+    max-width: none;
+    text-align: center;
+    font-size: 9px;
+    line-height: 1.6;
+    pointer-events: none;
+  }
+  .specimen-note {
+    right: 16px;
+    bottom: calc(var(--dock-height) + 64px + env(safe-area-inset-bottom, 0px));
+    width: auto;
+    pointer-events: none;
+  }
+  .specimen-note .note-number {
+    display: none;
+  }
+  .specimen-note p {
+    margin: 0;
+    font-size: 11px;
+  }
+  .specimen-note br,
+  .specimen-description {
+    display: none;
+  }
+}
+@media (max-width: 760px) and (max-height: 650px) {
+  .specimen-note {
+    display: none;
+  }
+  .title-block {
+    top: calc(132px + env(safe-area-inset-top, 0px));
+    font-size: 16vw;
+  }
+}
+@media (max-height: 500px) and (max-width: 1000px) and (orientation: landscape) {
+  .study-shell {
+    --dock-height: 60px;
+  }
+  .brand-bar {
+    height: 42px;
+  }
+  .selection {
+    top: 49px;
+    gap: 2px;
+  }
+  .selection-label {
+    display: none;
+  }
+  .fruit-pill {
+    min-height: 32px;
+  }
+  .title-block {
+    top: 94px;
+    font-size: clamp(48px, 8vw, 76px);
+  }
+  .toolbar {
+    grid-template-columns: repeat(10, minmax(0, 1fr));
+    max-width: 820px;
+    bottom: calc(6px + env(safe-area-inset-bottom, 0px));
+  }
+  .tool-button {
+    height: 46px;
+  }
+  .toolbar-hint,
+  .specimen-note {
+    display: none;
+  }
+  .physics-panel {
+    left: auto;
+    right: max(12px, env(safe-area-inset-right, 0px));
+    width: min(320px, 52vw);
+    bottom: calc(70px + env(safe-area-inset-bottom, 0px));
+    max-height: calc(100dvh - 118px);
+  }
+}
+@media (pointer: coarse) {
+  .tool-button {
+    min-height: 44px;
+  }
+  .physics-range input {
+    min-height: 44px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
+
+.preview-notice {
+  display: none;
+}
+@media (max-width: 760px), (max-height: 500px) and (max-width: 1000px) {
+  .preview-notice {
+    display: block;
+    position: absolute;
+    z-index: 5;
+    top: calc(245px + env(safe-area-inset-top, 0px));
+    left: 16px;
+    max-width: calc(50% - 32px);
+    padding: 7px 9px;
+    border-radius: 4px;
+    background: #eee1ca;
+    color: #725735;
+    font: 10px/1.5 var(--mono);
+  }
+}
+
+/* Specimen-led main page, following the supplied October 5 layout. */
+.studio-loading {
+  padding: 40px;
+  font: 12px var(--mono);
+}
+.specimen-heading {
+  position: absolute;
+  z-index: 1;
+  left: 5.5%;
+  top: 13%;
+  margin: 0;
+  pointer-events: none;
+  user-select: none;
+  color: #30332b;
+}
+.specimen-heading-english {
+  display: block;
+  font-size: clamp(68px, 8.75vw, 152px);
+  font-weight: 700;
+  line-height: 0.9;
+  letter-spacing: -0.065em;
+  text-transform: uppercase;
+}
+.specimen-heading-english > span {
+  display: block;
+}
+.specimen-heading-chinese {
+  display: block;
+  margin-top: 0.22em;
+  color: #781d18;
+  font-family: "PingFang SC", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif;
+  font-size: clamp(72px, 8.3vw, 144px);
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: 0.035em;
+}
+.selection {
+  top: 13.4%;
+  right: 5.6%;
+  left: auto;
+  transform: none;
+  align-items: flex-end;
+}
+.fruit-list {
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 15px;
+}
+.fruit-pill {
+  min-height: 34px;
+  padding: 4px 16px;
+  font-size: 15px;
+  font-weight: 300;
+  color: #30332b;
+  border-color: #b9847b;
+  background: transparent;
+}
+.fruit-pill:hover:not(:disabled) {
+  background: #e8d7d033;
+  border-color: #98554c;
+}
+.fruit-pill[aria-pressed="true"] {
+  background: #e5d7d0;
+  border-color: #ad746c;
+}
+.fruit-pill:disabled:not([aria-pressed="true"]) {
+  opacity: 0.58;
+}
+.specimen-caption {
+  position: absolute;
+  z-index: 1;
+  left: 5.5%;
+  top: 68.7%;
+  width: 295px;
+  max-width: 26%;
+  border-top: 1px solid #bdbbb1;
+  padding-top: 19px;
+  color: #30332b;
+  font-size: 15px;
+  line-height: 1.6;
+  font-weight: 300;
+  pointer-events: none;
+}
+.physics-panel {
+  top: auto;
+  left: auto;
+  right: 2.2%;
+  bottom: 27px;
+  width: 242px;
+}
+@media (min-width: 761px) and (max-width: 1360px) {
+  .physics-panel {
+    bottom: 92px;
+    right: 20px;
+    width: 214px;
+  }
+  .specimen-caption {
+    width: 260px;
+    font-size: 13px;
+  }
+  .caption-break {
+    display: none;
+  }
+}
+@media (max-width: 760px) {
+  .specimen-heading {
+    left: 6%;
+    top: calc(5% + env(safe-area-inset-top, 0px));
+  }
+  .specimen-heading-english {
+    font-size: clamp(26px, 7.8vw, 58px);
+    line-height: 0.96;
+    letter-spacing: -0.055em;
+  }
+  .specimen-heading-chinese {
+    font-size: clamp(42px, 10vw, 70px);
+    margin-top: 0.25em;
+  }
+  .selection {
+    top: calc(5% + env(safe-area-inset-top, 0px));
+    right: 5%;
+  }
+  .fruit-list {
+    gap: 5px;
+  }
+  .fruit-pill {
+    min-height: 34px;
+    font-size: 11px;
+    padding: 4px 11px;
+  }
+  .specimen-caption {
+    top: auto;
+    bottom: calc(var(--dock-height) + 30px + env(safe-area-inset-bottom, 0px));
+    left: 6%;
+    max-width: 88%;
+    width: 270px;
+    font-size: 11px;
+    line-height: 1.4;
+    padding-top: 8px;
+  }
+  .caption-break {
+    display: none;
+  }
+  .physics-panel {
+    left: auto;
+    right: 12px;
+    bottom: calc(var(--dock-height) + 20px + env(safe-area-inset-bottom, 0px));
+    width: min(320px, calc(100% - 24px));
+  }
+  .preview-notice {
+    top: auto;
+    bottom: calc(var(--dock-height) + 28px);
+    right: 12px;
+    left: auto;
+    max-width: calc(100% - 24px);
+  }
+}
+@media (max-width: 760px) and (max-height: 650px) {
+  .specimen-heading-english {
+    font-size: 7.6vw;
+  }
+  .specimen-heading-chinese {
+    font-size: 11vw;
+  }
+  .fruit-list {
+    gap: 3px;
+  }
+  .fruit-pill {
+    min-height: 29px;
+    font-size: 10px;
+  }
+  .specimen-caption {
+    display: none;
+  }
+}
+@media (max-height: 500px) and (max-width: 1000px) and (orientation: landscape) {
+  .specimen-heading {
+    top: 7%;
+  }
+  .specimen-heading-english {
+    font-size: 6.5vw;
+  }
+  .specimen-heading-chinese {
+    font-size: 6vw;
+  }
+  .selection {
+    top: 7%;
+    right: 4%;
+  }
+  .fruit-list {
+    gap: 5px;
+  }
+  .fruit-pill {
+    min-height: 27px;
+    padding: 2px 12px;
+    font-size: 11px;
+  }
+  .specimen-caption {
+    display: none;
+  }
+  .physics-panel {
+    right: 12px;
+    bottom: 70px;
+    width: min(320px, 52vw);
+  }
+}
+/* The bite guide describes the actual open arch of the Munch volume. */
+.munch-guide {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+  display: none;
+}
+.munch-guide image {
+  filter: drop-shadow(0 1px 1px #fff8);
+}
+.munch-status {
+  position: absolute;
+  left: 50%;
+  bottom: 95px;
+  transform: translateX(-50%);
+  max-width: min(440px, 86vw);
+  padding: 8px 13px;
+  border-radius: 10px;
+  background: #faf7eff0;
+  color: #662820;
+  font-size: 12px;
+  text-align: center;
+  pointer-events: none;
+}
+.munch-status:empty {
+  display: none;
+}
+@media (max-width: 760px) {
+  .munch-status {
+    bottom: 198px;
+  }
+}
+
+/* Tea-entry choreography: individual UI groups arrive from the right. Using
+   translate preserves the toolbar's existing centering transform. */
+.playground-shell[data-entering="true"] .specimen-heading,
+.playground-shell[data-entering="true"] .selection,
+.playground-shell[data-entering="true"] .specimen-caption,
+.playground-shell[data-entering="true"] .physics-panel,
+.playground-shell[data-entering="true"] .toolbar {
+  animation: playground-ui-enter 850ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.playground-shell[data-entering="true"] .selection {
+  animation-delay: 80ms;
+}
+.playground-shell[data-entering="true"] .specimen-caption {
+  animation-delay: 130ms;
+}
+.playground-shell[data-entering="true"] .physics-panel,
+.playground-shell[data-entering="true"] .toolbar {
+  animation-delay: 180ms;
+}
+.playground-shell[data-entering="true"] .canvas-stage {
+  animation: playground-scene-enter 950ms ease both;
+}
+.specimen-heading:focus {
+  outline: none;
+}
+@keyframes playground-ui-enter {
+  from {
+    translate: 105vw 0;
+    opacity: 0;
+  }
+  to {
+    translate: 0 0;
+    opacity: 1;
+  }
+}
+@keyframes playground-scene-enter {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .playground-shell[data-entering="true"] .specimen-heading,
+  .playground-shell[data-entering="true"] .selection,
+  .playground-shell[data-entering="true"] .specimen-caption,
+  .playground-shell[data-entering="true"] .physics-panel,
+  .playground-shell[data-entering="true"] .toolbar,
+  .playground-shell[data-entering="true"] .canvas-stage {
+    animation: playground-scene-enter 200ms both;
+  }
+}

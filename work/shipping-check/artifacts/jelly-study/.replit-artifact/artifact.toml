@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "Jelly Study"
+description = "A browser-based 3D fruit playground for studying translucent, jelly-like produce. The first stage presents a sculpted Chinese longevity peach with responsive orbit and zoom controls."
+version = "1.0.0"
+id = "artifacts/jelly-study"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 21332
+
+[services.development]
+run = "pnpm --filter @workspace/jelly-study run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/jelly-study", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/jelly-study/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "21332"
+BASE_PATH = "/"

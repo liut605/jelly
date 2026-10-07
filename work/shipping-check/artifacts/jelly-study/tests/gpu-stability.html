@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Jelly Study GPU stability check</title>
+  </head>
+  <body
+    style="
+      font: 16px/1.6 system-ui;
+      max-width: 1000px;
+      margin: 40px auto;
+      padding: 0 24px;
+    "
+  >
+    <h1>GPU stability regression</h1>
+    <p>
+      This development check runs the actual WebGL solver and reads the deformed
+      surface back from the GPU. It measures volume, cell orientation, floor
+      contact, grab response, settling, and control behavior. This is a
+      development check; keep this tab open until the result appears.
+    </p>
+    <pre id="results" style="white-space: pre-wrap">Starting…</pre>
+    <script type="module" src="./gpu-stability.ts"></script>
+  </body>
+</html>

@@ -1,0 +1,221 @@
+Use these prompts **one at a time in the same project**. Check each stage before sending the next. They build toward the full interface without trying to solve the appearance and physics all at once.
+
+## 1. Build the visual foundation
+
+```text
+Build a browser-based 3D playground called Jelly Study.
+
+For this first stage, focus only on the interface, one detailed 3D pear slice, and camera controls. Do not implement soft-body physics or cutting yet.
+
+Visual direction:
+- Minimal editorial interface, warm off-white background, charcoal text, generous negative space.
+- Oversized two-line JELLY STUDY heading in the top-left corner.
+- Use Outfit Bold with tight letter spacing. No underline.
+- Small descriptive text block in the bottom-right corner.
+- Typography must sit visually behind the 3D object. The object should occlude the letters when they overlap.
+- A subtle top brand bar.
+- Centered Add item label and compact pill-shaped fruit buttons near the top.
+- A compact floating toolbar centered at the bottom.
+- Thin borders, translucent warm-white surfaces, restrained rounding, small icons.
+- Avoid dashboard cards, gradients, decorative badges, and large call-to-action buttons.
+
+Create a thick, volumetric pear cross-section with green skin, pale flesh, a visible core, and embedded seeds. It must be real 3D geometry, not a flat image.
+
+Use soft studio lighting, glossy translucent jelly material, and a soft contact shadow. Keep the pear as the main focal point.
+
+Implement orbit by dragging empty space and zoom with the mouse wheel or pinch.
+
+Controls for future features should be visibly disabled, not pretend to work.
+
+Choose a rendering architecture that can later support volumetric soft-body deformation and slicing. Keep rendering, geometry, physics, and interface code separate.
+
+Verify the desktop and mobile layouts before finishing.
+```
+
+## 2. Make the pear behave like jelly
+
+```text
+Continue the existing Jelly Study app. Preserve its interface, pear appearance, lighting, and camera composition.
+
+Now implement real-time soft-body physics for the pear.
+
+Required behavior:
+- Grab the pear at the exact point clicked or touched.
+- Pull to create localized deformation, not whole-object scaling.
+- Release to let the pear spring back and settle.
+- Preserve volume and a recognizable pear silhouette.
+- Use a volumetric soft-body solver or an equivalent approach capable of supporting later cutting.
+- Keep the visible surface smooth during deformation without erasing skin, seeds, or core details.
+
+The physical feel is important:
+Firm but elastic, with delayed response, slight overshoot, and lingering damped vibration.
+Not watery, melting, rubber-band-like, or excessively floppy.
+Do not substitute a looping wobble animation for simulation.
+
+Separate object grabbing from camera orbit: dragging an object stretches it; dragging empty space rotates the camera.
+
+Enable Hand, Shake, Reset, Pause, and Slow motion.
+Add working firmness and damping controls.
+
+Use GPU acceleration where supported. If the required GPU support is unavailable, show a clearly labeled still preview and disable simulation-only controls.
+
+Verify that repeated grabbing and releasing stays stable and that Reset restores the original scene.
+```
+
+## 3. Add the other objects and editing controls
+
+```text
+Continue the existing app without redesigning it or changing the approved pear.
+
+Enable the centered Add item buttons for:
+- Gummy bear
+- Pear slice
+- Cucumber slice
+- Watermelon slice
+- Orange slice
+
+Each object needs real thickness, a recognizable silhouette, and jelly-like material. Fruit interiors must include appropriate details: rind, flesh, seeds, or citrus segments.
+
+Keep the pear at its current size. Make the cucumber noticeably smaller and the orange slightly smaller than the pear.
+
+Every added object must participate in the same soft-body simulation and support localized grabbing.
+
+Tap or click an object to open a compact contextual menu beside it:
+- Color swatches
+- Duplicate
+- Remove
+
+Distinguish a tap from a drag so stretching does not accidentally open the menu.
+Do not add a global Selected dropdown or a permanent settings sidebar.
+
+Ensure adding or duplicating objects places them sensibly rather than directly inside one another.
+Show the object count near Add item.
+Use an explicit performance limit if needed, with clear feedback when reached.
+
+Preserve the centered top controls and bottom toolbar.
+Verify add, recolor, duplicate, remove, and reset with several objects.
+```
+
+## 4. Add real slicing
+
+```text
+Continue the existing app. Preserve the approved visuals, controls, and physical feel.
+
+Implement a working Split tool.
+
+Interaction:
+- Select Split in the bottom toolbar.
+- Draw a stroke across a jelly object.
+- Show a subtle stroke guide while dragging.
+- Use that stroke to define a cutting plane through the object.
+- Produce separate pieces that can be grabbed and deformed independently.
+
+This must be an actual geometry and physics cut, not a texture line, clipping-only illusion, or disappearance effect.
+
+Requirements:
+- Generate closed cut surfaces with plausible interior material.
+- Preserve the existing outer skin and internal details where applicable.
+- Update simulation constraints and picking for the resulting pieces.
+- Keep the cut stable and prevent explosive motion or invalid geometry.
+- Handle a stroke that misses the object without changing the scene.
+- Clearly reject unsupported or excessively small cuts rather than silently failing.
+
+Do not add a visible knife model.
+Do not change the Hand interaction.
+
+Verify slicing, grabbing each resulting piece, removing a piece, and resetting the scene.
+```
+
+## 5. Add toothpick stacking
+
+```text
+Continue the existing app without changing the interface layout or fruit appearance.
+
+Implement Stack / Unstack in the bottom toolbar.
+
+Stack means arranging the current pieces along a visible wooden toothpick or skewer, as if the stick passes through their centers.
+
+Requirements:
+- Render a slender wooden stick with enough visible length to understand the arrangement.
+- Space the objects according to their actual dimensions.
+- Attach a narrow central region of each object to the stick.
+- Keep the outer jelly deformable and able to jiggle.
+- Prevent neighboring layers from passing through one another.
+- Do not freeze every vertex or turn the stack into a rigid model.
+- Keep the stick visually aligned with its attachment points during interaction.
+
+The button must toggle between Stack and Unstack.
+Unstack removes the attachment constraints and returns pieces to independent interaction without an explosive jump.
+
+Keep add, duplicate, remove, and recolor coherent while stacked.
+Disable Split while stacked and clearly explain that the user must unstack first.
+
+Verify stacking differently sized fruit, stretching a stacked piece, adding or removing a piece, unstacking, and resetting.
+```
+
+## 6. Finish camera controls and mobile behavior
+
+```text
+Refine the existing Jelly Study app for desktop and mobile. Do not redesign the approved interface or alter the fruit materials.
+
+Complete the View controls:
+- Front
+- ¾
+- Side
+- Slow motion
+- Pause / Resume
+
+Ensure camera presets frame the current scene sensibly.
+
+Touch behavior:
+- One-finger drag on an object grabs and stretches it.
+- Dragging empty space orbits the camera.
+- Pinching zooms without accidentally stretching or cutting.
+- A tap opens the object menu.
+- Prevent browser scrolling while interacting with the full-screen playground.
+
+Responsive layout:
+- Keep Add item and the fruit buttons centered at the top.
+- Keep Stack / Unstack in the bottom toolbar.
+- Wrap controls neatly on narrow screens.
+- Scale JELLY STUDY typography appropriately.
+- Keep the description, contextual menus, notices, and tool popovers clear of controls.
+- Preserve text-behind-object layering.
+
+Use accessible names, visible keyboard focus, and adequate touch targets.
+Verify both a narrow phone viewport and a large desktop viewport.
+```
+
+## 7. Tune the feel and performance
+
+```text
+Perform a final quality pass on the existing Jelly Study app.
+
+Preserve the approved layout, typography, pear shape, fruit details, and relative object sizes. Do not introduce new features or redesign anything.
+
+Tune the jelly:
+- Make it firmer, not softer.
+- Preserve its structure under pulling.
+- Add delayed response and lingering damped vibration.
+- Avoid watery deformation and excessive stretching.
+- Remove visible simulation-mesh creases without smoothing away fruit details.
+
+Check performance with multiple detailed objects:
+- Keep grabbing responsive.
+- Avoid unnecessary per-frame allocations and geometry rebuilds.
+- Release simulation and GPU resources when objects are removed.
+- Apply clear, conservative scene limits if necessary.
+- Keep any quality reduction explicit rather than silently changing the design.
+
+Verify the complete flow:
+Add → grab → release → recolor → duplicate → split → stack → unstack → remove → reset.
+
+Check that unsupported GPU devices receive an honest still-preview state.
+Report which behaviors were actually verified and which could not be tested in the available environment.
+
+Fix functional issues before making cosmetic adjustments.
+```
+
+**Useful instruction to append to any stage:**
+
+> “Only implement this stage. Preserve everything already approved. Do not replace working functionality with a mockup, and do not claim an interaction works unless it is implemented and verified.”

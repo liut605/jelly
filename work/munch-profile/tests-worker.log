@@ -1,0 +1,50 @@
+
+> jelly-study-workspace@0.0.0 test /Users/tsingliu/Desktop/MFA DT/jelly-study/local
+> node --experimental-strip-types --test artifacts/jelly-study/tests/*.test.ts
+
+✔ bitter gourd has connected positive volume, a thick supported core and real external tubercles (1263.909834ms)
+✔ dried persimmon slice has positive supported volume and a smooth planar leaf-free cut (1293.522208ms)
+✔ exposed dried persimmon has eight tissue rays, a darker heart and orange speckled flesh (5.599625ms)
+✔ all entry paths stay finite and approach the same black lens without a camera flip (73.677625ms)
+✔ overhead entry reaches a horizontal top view before closing in (0.174208ms)
+✔ orbit and resize preserve the requested camera distance; only menu zoom changes it (15.4435ms)
+✔ full viewport walls include the title area with desktop and phone composition (0.740458ms)
+✔ stuffed lotus root is a supported thick composite volume with attached rice and flower relief (2846.312167ms)
+✔ lace channels contain contrasting white rice and nine separate four-petalled blossoms (35.688625ms)
+✔ small lotus tunnels are watertight, open through both caps, and bounded by the slice (2225.196791ms)
+✔ tunnel skin follows the actual volume under rigid tilt and local affine deformation (1495.279417ms)
+✔ worker transfer preserves the live mesh, variable-length bindings, material coordinates and velocities (1334.541ms)
+✔ one reusable worker: misses/rejections retain scene and overlapping clicks are rejected (500.54525ms)
+✔ reset cancels in-flight work and late replies cannot revive a disposed scene (238.05225ms)
+✔ worker load failure is recoverable on the next bite (120.366708ms)
+✔ Munch removes volume and constraints while retaining a closed conforming tetrahedral boundary (1128.342625ms)
+✔ a missed Munch leaves the exact original snapshot untouched (404.07175ms)
+✔ a guide containing the complete remainder consumes its physical body (544.948709ms)
+✔ Munch creates a closed visible tooth-marked surface with new interior material (3875.537292ms)
+✔ a central bite can create independent physical pieces without cross-cut links (161.121958ms)
+✔ Munch accepts a grazing bite below the old overlap minimum and preserves its input (1941.328625ms)
+✔ a dividing bite produces two closed visible pieces with separate physical volumes (2123.7405ms)
+✔ the supplied scalloped arch has its tall proportions and cuts vertically at every orbit (5.993583ms)
+✔ cut faces are finely tessellated, vertical and bound without changing their current pose (3432.14325ms)
+✔ the vertical cutter preserves the SVG's screen proportions across viewport, orbit and zoom (124.548625ms)
+✔ smooth volume normals reproduce affine strain without discontinuities at physical cell boundaries (80.964583ms)
+✔ a bite made in a deformed body retains its vertical surface and smooth normals when rebound (3555.386125ms)
+✔ local remnant cleanup removes an attached paper-thin flap while retaining the solid mass (425.498708ms)
+✔ thickness cleanup leaves a healthy rounded surface intact without a pale skim band (137.617292ms)
+✔ persimmon has a thick supported closed volume without folded material cells (519.568334ms)
+✔ persimmon tissue has eight separate star rays around a pale unmasked center (0.524125ms)
+✔ screen overlap includes edge crossings and excludes a real miss (39.094709ms)
+✔ moved and tilted split fragments resolve in their own current pose, independent of a higher neighbor (5687.99575ms)
+✔ tetrahedra form a connected, closed volume without unmatched interior faces (54.227917ms)
+✔ surface bindings preserve rigid translations and close the visible seam (21.840667ms)
+✔ the slice cavity is empty and the volume mapping does not fold cells (66.116292ms)
+✔ the cut face rolls into the outer skin with no rim crease (0.651125ms)
+✔ the slice has a broad level support area with rounded shoulders (1.5595ms)
+ℹ tests 38
+ℹ suites 0
+ℹ pass 38
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 18800.424875

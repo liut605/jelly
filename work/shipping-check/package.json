@@ -1,0 +1,28 @@
+{
+  "name": "jelly-study-workspace",
+  "version": "0.0.0",
+  "license": "MIT",
+  "scripts": {
+    "preinstall": "node scripts/check-package-manager.cjs",
+    "build": "pnpm run typecheck && pnpm -r --if-present run build",
+    "typecheck:libs": "tsc --build",
+    "typecheck": "pnpm run typecheck:libs && pnpm -r --filter \"./artifacts/**\" --filter \"./scripts\" --if-present run typecheck",
+    "dev": "pnpm --filter @workspace/jelly-study run dev",
+    "preview": "pnpm --filter @workspace/jelly-study run preview",
+    "dev:api": "pnpm --filter @workspace/api-server run dev",
+    "dev:mockup": "pnpm --filter @workspace/mockup-sandbox run dev",
+    "test": "node --experimental-strip-types --test artifacts/jelly-study/tests/*.test.ts",
+    "build:site": "pnpm --filter @workspace/jelly-study typecheck && pnpm --filter @workspace/jelly-study build && node scripts/verify-site-build.mjs",
+    "check:site": "node scripts/verify-site-build.mjs"
+  },
+  "private": true,
+  "devDependencies": {
+    "prettier": "^3.9.6",
+    "typescript": "~5.9.3"
+  },
+  "packageManager": "pnpm@10.18.3",
+  "engines": {
+    "node": ">=24 <25",
+    "pnpm": ">=10 <11"
+  }
+}

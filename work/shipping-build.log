@@ -1,0 +1,51 @@
+
+> jelly-study-workspace@0.0.0 build:site /Users/tsingliu/Desktop/MFA DT/jelly-study/local/work/shipping-check
+> pnpm --filter @workspace/jelly-study typecheck && pnpm --filter @workspace/jelly-study build && node scripts/verify-site-build.mjs
+
+
+> @workspace/jelly-study@0.0.0 typecheck /Users/tsingliu/Desktop/MFA DT/jelly-study/local/work/shipping-check/artifacts/jelly-study
+> tsc -p tsconfig.json --noEmit
+
+
+> @workspace/jelly-study@0.0.0 build /Users/tsingliu/Desktop/MFA DT/jelly-study/local/work/shipping-check/artifacts/jelly-study
+> vite build --config vite.config.ts
+
+vite v7.3.6 building client environment for production...
+transforming...
+[plugin vite:resolve] Module "node:module" has been externalized for browser compatibility, imported by "/Users/tsingliu/Desktop/MFA DT/jelly-study/local/work/shipping-check/node_modules/.pnpm/manifold-3d@3.5.4_@types+node@25.9.6/node_modules/manifold-3d/manifold.js". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+✓ 1720 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/public/index.html                                              1.66 kB │ gzip:   0.60 kB
+dist/public/assets/munch.worker-B0iBd1--.js                       179.81 kB
+dist/public/assets/tea-blossoms-hover-poster-DTBlcMap.jpg         304.71 kB
+dist/public/assets/manifold-BE4c7gO-.wasm                         541.47 kB │ gzip: 205.86 kB
+dist/public/assets/tea-blossoms-clean-background-RUSK9cWc.jpg     841.89 kB
+dist/public/assets/tea-blossoms-hover-DozpoFpa.mp4              6,391.26 kB
+dist/public/assets/tea-set-web-Dvwdo_Nt.glb                    31,790.71 kB
+dist/public/assets/TeaLanding-B7TCT960.css                          5.48 kB │ gzip:   1.72 kB
+dist/public/assets/index-HMpKnX-0.css                             117.68 kB │ gzip:  22.26 kB
+dist/public/assets/TeaLanding-8_OaDR2A.js                         329.72 kB │ gzip: 127.76 kB
+dist/public/assets/index-Bf6ctzTP.js                              839.76 kB │ gzip: 237.16 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 4.40s
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Development files included in web output
+    at file:///Users/tsingliu/Desktop/MFA%20DT/jelly-study/local/work/shipping-check/scripts/verify-site-build.mjs:22:1 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
+ ELIFECYCLE  Command failed with exit code 1.

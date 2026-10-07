@@ -1,0 +1,60 @@
+{
+  "input": "attached_assets/document-camera-original.glb",
+  "output": "attached_assets/document-camera-web.glb",
+  "originalBytes": 66255176,
+  "bytes": 44665900,
+  "originalSha256": "cda6b4f8bf298c946f7483071a03e3222058528fae3de4958feb2f4bd9ac0cd2",
+  "lossless": true,
+  "verifiedGeometryBuffers": 48,
+  "meshes": [
+    {
+      "name": "Mesh_0",
+      "triangles": 547548
+    },
+    {
+      "name": "Mesh_1",
+      "triangles": 189014
+    },
+    {
+      "name": "Mesh_10",
+      "triangles": 18264
+    },
+    {
+      "name": "Mesh_11",
+      "triangles": 15199
+    },
+    {
+      "name": "Mesh_2",
+      "triangles": 182433
+    },
+    {
+      "name": "Mesh_3",
+      "triangles": 123893
+    },
+    {
+      "name": "Mesh_4",
+      "triangles": 112227
+    },
+    {
+      "name": "Mesh_5",
+      "triangles": 118507
+    },
+    {
+      "name": "Mesh_6",
+      "triangles": 99929
+    },
+    {
+      "name": "Mesh_7",
+      "triangles": 53679
+    },
+    {
+      "name": "Mesh_8",
+      "triangles": 30563
+    },
+    {
+      "name": "Mesh_9",
+      "triangles": 492292
+    }
+  ],
+  "segmentation": "12 source meshes, no semantic rig or joints. Explicit interaction anchors in documentCamera.ts; no automatic articulation."
+}

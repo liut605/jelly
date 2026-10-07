@@ -1,0 +1,12 @@
+.git
+.local
+.pnpm-store
+node_modules
+**/node_modules
+**/dist
+work
+.vercel
+.DS_Store
+.env*
+attached_assets/*-original.glb
+attached_assets/document-camera-web.glb
