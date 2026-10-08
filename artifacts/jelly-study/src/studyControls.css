@@ -4,10 +4,12 @@
   --control-ink: #30332c;
   --control-muted: rgb(48 51 44 / 60%);
   --control-line: #99998e;
+  --specimen-nav-bottom: max(7%, env(safe-area-inset-bottom, 0px));
+  --copy-rule-gap: 19px;
 }
 
 .selection {
-  inset: auto auto max(7%, env(safe-area-inset-bottom, 0px)) 5.5%;
+  inset: auto auto var(--specimen-nav-bottom) 5.5%;
   transform: none;
   display: block;
   max-width: calc(100% - 370px);
@@ -43,8 +45,7 @@
     border-color 160ms ease;
 }
 .fruit-link:first-child {
-  padding-left: 0;
-  border-left: 0;
+  border-left-width: 0.5pt;
 }
 .fruit-link > span[lang] {
   font-family: "PingFang SC", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif;
@@ -82,7 +83,6 @@
   gap: 0;
   padding: 0 0 0 22px;
   border: 0;
-  border-left: 1px solid var(--control-line);
   border-radius: 0;
   background: transparent;
   box-shadow: none;
@@ -253,6 +253,9 @@
 
 /* Compact screens retain a right-hand rail, with a dismissible physics window. */
 @media (max-width: 900px), (max-height: 710px) {
+  .study-shell {
+    --specimen-nav-bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+  }
   .toolbar {
     top: max(16px, env(safe-area-inset-top, 0px));
     right: max(16px, env(safe-area-inset-right, 0px));
@@ -321,7 +324,7 @@
     height: 36px;
   }
   .selection {
-    inset: auto 6% calc(20px + env(safe-area-inset-bottom, 0px)) 6%;
+    inset: auto 6% var(--specimen-nav-bottom) 6%;
     max-width: none;
   }
   .fruit-list {
@@ -394,6 +397,9 @@
   }
 }
 @media (max-height: 500px) and (min-aspect-ratio: 1.3) {
+  .study-shell {
+    --specimen-nav-bottom: 16px;
+  }
   .toolbar {
     max-height: calc(100dvh - 32px);
   }
@@ -403,7 +409,7 @@
   }
   .selection {
     right: 100px;
-    bottom: 16px;
+    bottom: var(--specimen-nav-bottom);
   }
   .fruit-link {
     font-size: 11px;
@@ -424,12 +430,12 @@
 .tool-button:is(:hover, :active, :focus-visible, [data-active="true"]):not(
     :disabled
   )
-  :is(.lucide-hand, .lucide-cookie, .lucide-timer) {
+  :is(.lucide-cookie, .lucide-timer) {
   fill: rgb(109 27 24 / 32%);
 }
 .canvas-stage[data-tool="hand"],
 .canvas-stage[data-tool="hand"]:active {
-  cursor: default;
+  cursor: grab;
 }
 .canvas-stage[data-grabbing="true"] {
   cursor: grabbing;
@@ -441,10 +447,707 @@
   cursor: grabbing;
 }
 .canvas-stage[data-tool="munch"] {
-  cursor: crosshair;
+  cursor: none;
 }
 @media (min-width: 601px) and (max-width: 760px) {
   .specimen-caption {
     top: auto;
+  }
+}
+
+.tool-button .zoom-icon {
+  stroke: none;
+}
+.zoom-lens {
+  fill: transparent;
+  transition: fill 160ms ease;
+}
+.tool-button:is(:hover, :active, :focus-visible):not(:disabled) .zoom-lens {
+  fill: rgb(109 27 24 / 32%);
+}
+
+/* Wide, shallow desktop windows need height-aware type and caption spacing. */
+@media (min-width: 901px) and (min-aspect-ratio: 17/10) {
+  .study-shell {
+    --desktop-english: min(clamp(68px, 8.75vw, 152px), 14vh);
+    --desktop-chinese: min(clamp(72px, 8.3vw, 144px), 13.3vh);
+  }
+  .specimen-heading-english {
+    font-size: var(--desktop-english);
+  }
+  .specimen-heading-chinese {
+    font-size: var(--desktop-chinese);
+  }
+  .specimen-caption {
+    top: max(
+      58.4%,
+      calc(
+        13% + var(--desktop-english) * 1.8 + var(--desktop-chinese) * 1.32 +
+          24px
+      )
+    );
+  }
+}
+
+/* Custom Hand: a continuous fill under the supplied solid outline. */
+.tool-button .hand-icon {
+  stroke: none;
+}
+.hand-icon-fill {
+  opacity: 0;
+  transition: opacity 160ms ease;
+}
+.tool-button:is(:hover, :active, :focus-visible, [data-active="true"]):not(
+    :disabled
+  )
+  .hand-icon-fill {
+  opacity: 1;
+}
+
+/* One magnifier opens the two explicit zoom actions on every device. */
+.specimen-next {
+  display: none;
+}
+.tool-zoom {
+  position: relative;
+  display: block;
+}
+.tool-zoom > .tool-button {
+  justify-content: flex-start;
+  padding: 0 8px;
+  gap: 10px;
+}
+.tool-button .zoom-icon {
+  stroke: currentColor;
+  stroke-width: 1.5;
+  fill: none;
+}
+.zoom-controls {
+  position: absolute;
+  right: calc(100% + 16px);
+  top: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  width: 176px;
+  padding: 8px;
+  border: 1px solid var(--control-line);
+  background: var(--ground);
+  box-shadow: 0 4px 16px #30332c0a;
+}
+.zoom-controls .tool-button {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 100%;
+  height: 56px;
+  font-size: 12px;
+}
+.zoom-controls .tool-button + .tool-button {
+  border-left: 1px solid var(--control-line);
+}
+.zoom-controls .tool-button > span {
+  display: block;
+}
+@media (min-width: 761px) and (max-width: 900px),
+  (min-width: 1001px) and (max-height: 710px) {
+  .tool-zoom > .tool-button {
+    padding: 0;
+    justify-content: center;
+  }
+}
+
+/* Mobile reference: compact header, a centered specimen, and two rows of tools. */
+@media (max-width: 760px), (max-height: 500px) and (max-width: 1000px) {
+  .study-shell {
+    --copy-rule-gap: 20px;
+    --mobile-heading-top: clamp(32px, 11.8dvh, 112px);
+    --mobile-title-size: clamp(26px, 7.6vw, 36px);
+    --mobile-chinese-size: clamp(28px, 7.5vw, 36px);
+    --mobile-dock-bottom: max(
+      9dvh,
+      calc(16px + env(safe-area-inset-bottom, 0px))
+    );
+    --mobile-dock-height: 141px;
+  }
+  .selection {
+    display: none;
+  }
+  .specimen-heading {
+    top: var(--mobile-heading-top);
+    left: 4%;
+    max-width: calc(92% - 72px);
+  }
+  .specimen-heading-english {
+    font-size: var(--mobile-title-size);
+    line-height: 0.9;
+    letter-spacing: -0.055em;
+  }
+  .specimen-heading-chinese {
+    font-size: var(--mobile-chinese-size);
+    line-height: 1.1;
+    margin-top: 0.22em;
+  }
+  .specimen-next {
+    position: absolute;
+    z-index: 5;
+    top: var(--mobile-heading-top);
+    right: max(4%, env(safe-area-inset-right, 0px));
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-width: 64px;
+    min-height: 44px;
+    padding: 4px;
+    border: 0;
+    background: transparent;
+    color: var(--control-muted);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .specimen-next svg {
+    width: 16px;
+    height: 16px;
+  }
+  .specimen-next:is(:hover, :active, :focus-visible) {
+    color: var(--accent);
+  }
+  .specimen-next:focus-visible {
+    outline: 1px solid var(--accent);
+    outline-offset: 3px;
+  }
+  .specimen-caption {
+    display: block;
+    left: 4%;
+    top: calc(
+      var(--mobile-heading-top) + var(--mobile-title-size) * 1.8 +
+        var(--mobile-chinese-size) * 1.32 + 18px
+    );
+    bottom: auto;
+    width: 90%;
+    max-width: none;
+    padding-top: var(--copy-rule-gap);
+    font-size: 12px;
+    line-height: 1.6;
+  }
+  .toolbar {
+    inset: auto 6% var(--mobile-dock-bottom) 6%;
+    width: auto;
+    max-width: none;
+    max-height: none;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-auto-rows: 58px;
+    gap: 6px 0;
+    padding: 18px 0 0;
+    border: 0;
+    border-top: 1px solid var(--control-line);
+    overflow: visible;
+  }
+  .tool-divider {
+    display: none;
+  }
+  .toolbar .tool-button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 58px;
+    min-height: 44px;
+    padding: 0 3px;
+    gap: 7px;
+    font-size: 12px;
+    line-height: 1.2;
+  }
+  .toolbar .tool-button > span {
+    display: block;
+  }
+  .toolbar .tool-button svg {
+    width: 24px;
+    height: 24px;
+    flex-basis: 24px;
+  }
+  .tool-button[data-active="true"]::before {
+    left: -1px;
+    top: 12px;
+    bottom: 12px;
+    width: 1px;
+  }
+  .tool-zoom {
+    width: 100%;
+    height: 58px;
+  }
+  .zoom-controls {
+    top: auto;
+    bottom: calc(100% + 26px);
+    right: auto;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  .physics-panel {
+    inset: auto 4%
+      calc(var(--mobile-dock-bottom) + var(--mobile-dock-height) + 16px) 4%;
+    width: auto;
+    max-height: calc(
+      100dvh - var(--mobile-dock-bottom) - var(--mobile-dock-height) - 40px
+    );
+    padding: 18px 20px;
+    overflow-y: auto;
+  }
+  .physics-panel[data-expanded="false"] {
+    display: none;
+  }
+  .settings-close {
+    display: flex;
+  }
+  .munch-status {
+    top: auto;
+    bottom: calc(var(--mobile-dock-bottom) + var(--mobile-dock-height) + 18px);
+    max-width: 88%;
+  }
+  .preview-notice {
+    bottom: calc(var(--mobile-dock-bottom) + var(--mobile-dock-height) + 18px);
+  }
+}
+@media (max-width: 760px) and (max-height: 700px) {
+  .study-shell {
+    --copy-rule-gap: 12px;
+    --mobile-heading-top: 24px;
+    --mobile-dock-bottom: max(18px, env(safe-area-inset-bottom, 0px));
+  }
+  .specimen-caption {
+    padding-top: var(--copy-rule-gap);
+  }
+}
+@media (max-width: 1000px) and (max-height: 500px) and (orientation: landscape) {
+  .study-shell {
+    --copy-rule-gap: 10px;
+    --mobile-heading-top: 18px;
+    --mobile-title-size: 24px;
+    --mobile-chinese-size: 24px;
+    --mobile-dock-bottom: max(12px, env(safe-area-inset-bottom, 0px));
+    --mobile-dock-height: 65px;
+  }
+  .specimen-heading {
+    max-width: calc(50% - 96px);
+  }
+  .specimen-next {
+    right: 52%;
+  }
+  .specimen-caption {
+    width: 42%;
+    font-size: 11px;
+    padding-top: var(--copy-rule-gap);
+  }
+  .toolbar {
+    left: 3%;
+    right: 3%;
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+    grid-auto-rows: 52px;
+    padding-top: 12px;
+    gap: 0;
+  }
+  .toolbar .tool-button {
+    height: 52px;
+    font-size: 11px;
+    gap: 4px;
+  }
+  .toolbar .tool-button svg {
+    width: 21px;
+    height: 21px;
+    flex-basis: 21px;
+  }
+  .tool-zoom {
+    height: 52px;
+  }
+  .physics-panel {
+    left: auto;
+    width: min(340px, 92%);
+  }
+}
+
+/* Zoom opens above the dock; Physics replaces it without reframing the jelly. */
+@media (max-width: 760px), (max-height: 500px) and (max-width: 1000px) {
+  .toolbar .zoom-controls {
+    position: fixed;
+    inset: auto 6%
+      calc(var(--mobile-dock-bottom) + var(--mobile-dock-height) + 8px);
+    width: auto;
+    transform: none;
+    padding: 6px;
+  }
+  .physics-panel {
+    inset: auto 6% var(--mobile-dock-bottom);
+    width: auto;
+    height: var(--mobile-dock-height);
+    max-height: none;
+    z-index: 8;
+    background: var(--ground);
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 4px 20px;
+    padding: 8px 16px;
+  }
+  .study-shell[data-mobile-menu="physics"] .toolbar {
+    visibility: hidden;
+    pointer-events: none;
+  }
+  .physics-panel-heading {
+    grid-column: 1 / -1;
+    margin: 0 32px 2px 0;
+  }
+  .physics-range {
+    margin: 0;
+  }
+  .physics-range input {
+    height: 26px;
+  }
+}
+@media (max-width: 1000px) and (max-height: 500px) and (orientation: landscape) {
+  .physics-panel {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    left: 3%;
+    right: 3%;
+    padding-right: 48px;
+    align-items: center;
+  }
+  .physics-panel-heading {
+    display: none;
+  }
+}
+
+/* Paper controls float over the scene. Opacity applies to the surface only. */
+:root {
+  --control-surface: color-mix(in srgb, var(--ground) 70%, transparent);
+}
+.controls-dock {
+  display: contents;
+}
+.toolbar,
+.physics-panel,
+.toolbar .zoom-controls {
+  background: var(--control-surface);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+.physics-panel {
+  border: 0;
+  border-top: 0.5pt solid #30332c;
+  box-shadow: none;
+}
+.physics-panel[data-expanded="false"] {
+  display: none;
+}
+.settings-toggle,
+.settings-close {
+  display: flex;
+}
+.settings-close {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 40px;
+  height: 40px;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  border: 0;
+  background: transparent;
+  color: var(--control-muted);
+  cursor: pointer;
+}
+.settings-close:hover,
+.settings-close:focus-visible {
+  color: var(--accent);
+}
+.tool-zoom:hover .tool-button {
+  color: var(--control-muted);
+}
+.tool-zoom
+  .tool-button:is(:hover, :focus-visible, :active, [data-active="true"]) {
+  color: var(--accent);
+}
+.canvas-stage .munch-status {
+  position: absolute;
+  bottom: auto;
+  right: auto;
+  transform: none;
+  width: max-content;
+  max-width: min(260px, calc(100% - 32px));
+  margin: 0;
+  padding: 3px 6px;
+  border: 0;
+  border-radius: 0;
+  background: var(--control-surface);
+  box-shadow: none;
+  color: var(--control-ink);
+  font: 600 14px/1.35 var(--sans);
+  text-align: left;
+  pointer-events: none;
+}
+/* A decorative text cursor travels with the feedback; no editable field. */
+.canvas-stage .munch-status::before {
+  content: "";
+  display: inline-block;
+  width: 5px;
+  height: 1em;
+  margin-right: 5px;
+  vertical-align: -0.12em;
+  border-top: 1px solid currentColor;
+  border-bottom: 1px solid currentColor;
+  background: linear-gradient(currentColor, currentColor) center / 1px 100%
+    no-repeat;
+}
+@media (min-width: 761px) and (min-height: 501px), (min-width: 1001px) {
+  .controls-dock {
+    --rail-top: clamp(24px, 13.4vh, 150px);
+    position: absolute;
+    z-index: 7;
+    top: var(--rail-top);
+    bottom: var(--specimen-nav-bottom);
+    right: 5%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 12px;
+    pointer-events: none;
+    max-height: none;
+  }
+  .controls-dock .toolbar {
+    position: relative;
+    inset: auto;
+    flex-shrink: 0;
+    width: 152px;
+    max-height: none;
+    padding: 0 0 0 12px;
+  }
+  .controls-dock .toolbar,
+  .controls-dock .physics-panel {
+    pointer-events: auto;
+  }
+  .controls-dock .toolbar .tool-button {
+    display: flex;
+    flex-direction: row;
+    height: clamp(32px, 4.4vh, 46px);
+    min-height: 32px;
+    gap: 8px;
+    padding: 0 8px;
+    justify-content: flex-start;
+  }
+  .controls-dock .toolbar .tool-button > span {
+    display: block;
+  }
+  .controls-dock .toolbar .tool-button[data-active="true"]::before {
+    left: -13px;
+  }
+  .controls-dock .toolbar .zoom-toggle {
+    display: none;
+  }
+  .controls-dock .tool-zoom {
+    height: auto;
+  }
+  .controls-dock .toolbar .zoom-controls {
+    position: static;
+    inset: auto;
+    transform: none;
+    width: auto;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0;
+    padding: 0;
+    border: 0;
+    box-shadow: none;
+    background: transparent;
+    backdrop-filter: none;
+  }
+  .controls-dock .zoom-controls .tool-button + .tool-button {
+    border: 0;
+  }
+  .controls-dock .physics-panel {
+    position: relative;
+    inset: auto;
+    width: 260px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px 18px;
+    min-height: 0;
+    max-height: none;
+    padding: 12px 16px;
+    overflow: auto;
+  }
+  .controls-dock .physics-panel[data-expanded="false"] {
+    display: none;
+  }
+  .controls-dock .physics-panel-heading {
+    grid-column: 1 / -1;
+    margin: 0 28px 4px 0;
+    padding: 0;
+  }
+  .controls-dock .physics-range {
+    margin: 0;
+  }
+  .controls-dock .physics-range input {
+    height: 26px;
+  }
+  .controls-dock .tool-divider {
+    width: calc(100% - 16px);
+    margin: 5px 8px;
+  }
+}
+@media (max-width: 760px), (max-height: 500px) and (max-width: 1000px) {
+  .toolbar .zoom-toggle {
+    display: flex;
+  }
+  .toolbar .zoom-controls[data-expanded="false"] {
+    display: none;
+  }
+}
+
+/* Change the copy only after its exit, then bring the new specimen in with it. */
+.playground-shell[data-specimen-phase="leaving"]
+  :is(.specimen-heading, .specimen-caption) {
+  animation: specimen-copy-exit 300ms ease-in both;
+}
+.playground-shell[data-specimen-phase="leaving"] .canvas-stage {
+  animation: playground-scene-enter 250ms ease reverse both;
+  pointer-events: none;
+}
+.playground-shell[data-specimen-phase="loading"]
+  :is(.specimen-heading, .specimen-caption, .canvas-stage) {
+  opacity: 0;
+  pointer-events: none;
+}
+.playground-shell[data-specimen-phase="entering"]
+  :is(.specimen-heading, .specimen-caption) {
+  animation: playground-ui-enter 650ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.playground-shell[data-specimen-phase="entering"] .specimen-caption {
+  animation-delay: 70ms;
+}
+.playground-shell[data-specimen-phase="entering"] .canvas-stage {
+  animation: playground-scene-enter 350ms ease 550ms both;
+  pointer-events: none;
+}
+@keyframes specimen-copy-exit {
+  to {
+    translate: -105vw 0;
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .playground-shell[data-specimen-phase="leaving"]
+    :is(.specimen-heading, .specimen-caption, .canvas-stage) {
+    animation: playground-scene-enter 100ms reverse both;
+  }
+  .playground-shell[data-specimen-phase="entering"]
+    :is(.specimen-heading, .specimen-caption, .canvas-stage) {
+    animation: playground-scene-enter 200ms both;
+  }
+}
+
+/* Desktop reference: minus / Zoom / plus, and the original stacked settings. */
+.zoom-row-label {
+  display: none;
+}
+.controls-dock .physics-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding: var(--copy-rule-gap) 18px 14px;
+  overflow: hidden;
+}
+.controls-dock .physics-panel[data-expanded="false"] {
+  display: none;
+}
+.controls-dock .physics-panel-heading {
+  position: relative;
+  display: flex;
+  flex: 0 0 28px;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  line-height: 1.6;
+  margin: 0 0 8px;
+  padding: 0;
+}
+.controls-dock .settings-close {
+  position: static;
+  flex: 0 0 32px;
+  width: 32px;
+  height: 32px;
+  padding: 6px;
+}
+.physics-ranges {
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.controls-dock .physics-range {
+  display: block;
+  margin: 0 0 8px;
+}
+.controls-dock .physics-range:last-child {
+  margin-bottom: 0;
+}
+.controls-dock .physics-range input {
+  height: 26px;
+}
+@media (min-width: 761px) and (min-height: 501px), (min-width: 1001px) {
+  .controls-dock .toolbar .zoom-controls {
+    display: grid;
+    /* A 17px icon with 8px on either side aligns with the other tools.
+       Keep the full 33px cell clickable, including the visual spacing. */
+    grid-template-columns: 33px max-content 33px;
+    align-items: center;
+    gap: 0;
+    padding: 0;
+  }
+  .controls-dock .toolbar .zoom-controls .tool-button {
+    justify-content: center;
+    padding: 0;
+    min-width: 33px;
+  }
+  .controls-dock .toolbar .zoom-controls .tool-button > span {
+    display: none;
+  }
+  .controls-dock .zoom-row-label {
+    display: block;
+    order: 1;
+    text-align: center;
+    color: var(--control-muted);
+    font-size: clamp(13px, 0.88vw, 15px);
+    font-weight: 600;
+  }
+  .controls-dock [data-testid="button-zoom-out"] {
+    order: 0;
+  }
+  .controls-dock [data-testid="button-zoom-in"] {
+    order: 2;
+  }
+  .controls-dock .toolbar [data-testid="button-shake"] {
+    order: 1;
+  }
+  .controls-dock .toolbar [data-testid="button-slow-motion"] {
+    order: 2;
+  }
+  .controls-dock .physics-panel {
+    width: 230px;
+  }
+}
+@media (max-width: 760px), (max-height: 500px) and (max-width: 1000px) {
+  .controls-dock .physics-panel {
+    bottom: min(
+      var(--mobile-dock-bottom),
+      max(16px, env(safe-area-inset-bottom, 0px))
+    );
+    height: min(264px, 30dvh);
+    max-height: calc(100dvh - 32px);
+  }
+  .controls-dock .physics-ranges {
+    flex: 1;
   }
 }

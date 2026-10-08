@@ -85,6 +85,12 @@
   pointer-events: stroke;
   cursor: pointer;
 }
+.tea-branch-guide,
+.tea-branch-guide g,
+.tea-branch-guide path {
+  -webkit-tap-highlight-color: transparent;
+}
+.tea-branch-guide g:focus,
 .tea-branch-guide g:focus-visible {
   outline: none;
 }
@@ -332,5 +338,15 @@
 @media (prefers-reduced-motion: reduce) {
   .tea-landing-draft[data-leaving="true"] .tea-clean-background {
     animation: none;
+  }
+}
+
+/* Keep Enter on screen in wide desktop windows without cropping the title. */
+@media (min-width: 701px) and (min-aspect-ratio: 17/10) {
+  .tea-title-english {
+    font-size: min(clamp(70px, 8.75vw, 174px), 14vh);
+  }
+  .tea-title-chinese {
+    font-size: min(clamp(70px, 8.3vw, 165px), 13.3vh);
   }
 }

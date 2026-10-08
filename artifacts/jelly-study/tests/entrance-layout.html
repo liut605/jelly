@@ -1,0 +1,83 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Playground entrance timing</title>
+  </head>
+  <body>
+    <pre id="results">Checking entrance…</pre>
+    <script type="module">
+      const out = document.querySelector("#results");
+      const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+      const assert = (condition, message) => {
+        if (!condition) throw Error(message);
+      };
+      try {
+        for (const [width, height] of [
+          [402, 874],
+          [1440, 900],
+        ]) {
+          const frame = document.createElement("iframe");
+          frame.style.cssText = `width:${width}px;height:${height}px;border:0`;
+          frame.src = "/?playground=1";
+          document.body.append(frame);
+          let stage;
+          for (let attempt = 0; attempt < 500; attempt++) {
+            stage = frame.contentDocument?.querySelector(".canvas-stage");
+            if (stage?.getAnimations().length) break;
+            await wait(10);
+          }
+          assert(stage, "Playground did not mount");
+          const win = frame.contentWindow,
+            doc = frame.contentDocument;
+          const scene = stage.getAnimations()[0];
+          const controls = doc.querySelector(".toolbar").getAnimations()[0];
+          assert(scene && controls, "Entrance animations are missing");
+          scene.pause();
+          controls.pause();
+          const reveal = Number(scene.effect.getTiming().delay);
+          const finish = controls.effect.getComputedTiming().endTime;
+          assert(
+            reveal >= finish * 0.8 && reveal <= finish,
+            "Jelly must begin near the end of the controls entrance",
+          );
+          scene.currentTime = reveal - 1;
+          assert(
+            Number(win.getComputedStyle(stage).opacity) === 0,
+            "Jelly visible before late reveal",
+          );
+          assert(
+            win.getComputedStyle(stage).pointerEvents === "none",
+            "Hidden jelly accepts interactions",
+          );
+          scene.currentTime =
+            reveal + Number(scene.effect.getTiming().duration) / 2;
+          const opacity = Number(win.getComputedStyle(stage).opacity);
+          assert(opacity > 0 && opacity < 1, "Jelly must fade in");
+          scene.finish();
+          controls.finish();
+          for (
+            let attempt = 0;
+            attempt < 100 &&
+            doc.querySelector("main").dataset.entering === "true";
+            attempt++
+          )
+            await wait(100);
+          assert(
+            win.getComputedStyle(stage).opacity === "1",
+            "Jelly must remain visible after entrance",
+          );
+          assert(
+            win.getComputedStyle(stage).pointerEvents !== "none",
+            "Jelly interactions did not resume",
+          );
+          out.textContent += `\n${width}×${height}: late reveal, fade, interaction restore PASS`;
+          frame.remove();
+        }
+        out.textContent += "\nALL PASS";
+      } catch (error) {
+        out.textContent += "\nFAIL: " + error.message;
+      }
+    </script>
+  </body>
+</html>

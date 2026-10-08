@@ -50,9 +50,12 @@ export function StudioHost({ children }: { children: ReactNode }) {
   }, []);
   if (renderer === undefined)
     return (
-      <div className="studio-loading" role="status">
-        Preparing the study…
-      </div>
+      <div
+        className="studio-loading"
+        role="status"
+        aria-label="Loading study"
+        aria-busy="true"
+      />
     );
   return (
     <StudioContext.Provider value={renderer}>{children}</StudioContext.Provider>

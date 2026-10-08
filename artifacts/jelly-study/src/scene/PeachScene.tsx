@@ -481,8 +481,10 @@ export default function PeachScene({
       }
       if (!pieces.length) bounds.copy(restBounds);
       bounds.getCenter(boundsCenter);
-      if (!controls.munchEnabled) guideOverlay.style.display = "none";
-      else munchWorker.warmup();
+      if (!controls.munchEnabled) {
+        guideOverlay.style.display = "none";
+        munchStatus.style.visibility = "hidden";
+      } else munchWorker.warmup();
       mount.dataset.pieceCount = String(pieces.length);
       mount.dataset.biteCount = String(biteCount);
       if (import.meta.env.DEV) {
@@ -490,6 +492,29 @@ export default function PeachScene({
         mount.dataset.cameraTargetDistance = zoomTargetRef.current.toFixed(6);
         mount.dataset.cameraYaw = yaw.toFixed(6);
         mount.dataset.cameraPitch = pitch.toFixed(6);
+        mount.dataset.specimenScale = targetScale.toFixed(6);
+        // Screen-space bounds let browser regressions check actual simulated
+        // geometry against menus, including after zooming and deformation.
+        const screenBounds = new THREE.Box2();
+        for (const x of [bounds.min.x, bounds.max.x])
+          for (const y of [bounds.min.y, bounds.max.y])
+            for (const z of [bounds.min.z, bounds.max.z]) {
+              const point = new THREE.Vector3(x, y, z)
+                .multiplyScalar(targetScale)
+                .project(camera);
+              screenBounds.expandByPoint(
+                new THREE.Vector2(
+                  ((point.x + 1) * width) / 2,
+                  ((1 - point.y) * height) / 2,
+                ),
+              );
+            }
+        mount.dataset.surfaceScreenBounds = JSON.stringify({
+          top: screenBounds.min.y,
+          bottom: screenBounds.max.y,
+          left: screenBounds.min.x,
+          right: screenBounds.max.x,
+        });
       }
       ground.position.y = PEACH_FLOOR * targetScale - 0.003;
       shadow.scale.setScalar(targetScale);
@@ -565,9 +590,29 @@ export default function PeachScene({
     munchStatus.setAttribute("role", "status");
     munchStatus.dataset.testid = "munch-status";
     mount.appendChild(munchStatus);
-    const message = (text: string): void => {
-      munchStatus.textContent = text;
+    let feedbackTimer: ReturnType<typeof setTimeout> | undefined;
+    let feedbackX = 0,
+      feedbackY = 0;
+    let feedbackWidth = 70,
+      feedbackHeight = 24;
+    const positionFeedback = (): void => {
+      munchStatus.style.left = `${Math.max(8, Math.min(feedbackX + 14, mount.clientWidth - feedbackWidth - 8))}px`;
+      munchStatus.style.top = `${Math.max(8, Math.min(feedbackY + 12, mount.clientHeight - feedbackHeight - 8))}px`;
     };
+    const message = (text: string): void => {
+      clearTimeout(feedbackTimer);
+      munchStatus.textContent = text;
+      feedbackWidth = munchStatus.offsetWidth;
+      feedbackHeight = munchStatus.offsetHeight;
+      positionFeedback();
+      if (text !== "Munch" && text !== "Munching…")
+        feedbackTimer = setTimeout(
+          () => message("Munch"),
+          text === "Yum" ? 1800 : 3600,
+        );
+    };
+    message("Munch");
+    munchStatus.style.visibility = "hidden";
     const munchWorker = new MunchWorkerClient();
     const previewBite = (x: number, y: number): number | null => {
       if (!controlsRef.current.munchEnabled || !pieces.length) return null;
@@ -585,6 +630,10 @@ export default function PeachScene({
       guideImage.setAttribute("height", String(187 * scale));
       guideOverlay.setAttribute("viewBox", `0 0 ${rect.width} ${rect.height}`);
       guideOverlay.style.display = "block";
+      feedbackX = px;
+      feedbackY = py;
+      positionFeedback();
+      munchStatus.style.visibility = "visible";
       return radius;
     };
     const takeBite = async (x: number, y: number): Promise<void> => {
@@ -628,7 +677,7 @@ export default function PeachScene({
           }
           if (target.kind === "unsupported")
             throw new Error(
-              "This view is too low for a vertical bite here. Orbit slightly downward and try again.",
+              "This view is too tricky to munch on! Let's try a higher angle.",
             );
           // Complete screen containment consumes this fragment independently,
           // even if another piece is higher or farther away from the camera.
@@ -652,7 +701,7 @@ export default function PeachScene({
         }
         if (disposed) return;
         if (changes.every((change) => change.result.kind === "miss")) {
-          message("No jelly inside the bite guide.");
+          message("No jelly within reach.");
           return;
         }
         let removedVolume = 0;
@@ -692,11 +741,7 @@ export default function PeachScene({
           remainingPieces: consumed ? 0 : pieces.length,
           consumed,
         });
-        message(
-          consumed
-            ? "Finished — a fresh jelly is dropping in."
-            : "Munch! Switch to Hand to stretch the remaining jelly.",
-        );
+        message("Yum");
       } catch (error) {
         created.forEach(disposePiece);
         if (disposed) return;
@@ -916,6 +961,7 @@ export default function PeachScene({
     canvas.addEventListener("pointermove", onPointerMove);
     const hideBiteGuide = (): void => {
       guideOverlay.style.display = "none";
+      munchStatus.style.visibility = "hidden";
     };
     canvas.addEventListener("pointerleave", hideBiteGuide);
     canvas.addEventListener("pointerup", endDrag);
@@ -949,6 +995,7 @@ export default function PeachScene({
       material.dispose();
       depthMaterial.dispose();
       guideOverlay.remove();
+      clearTimeout(feedbackTimer);
       munchStatus.remove();
       ground.geometry.dispose();
       ground.material.dispose();

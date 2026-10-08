@@ -36,7 +36,8 @@ export function wheelViewGesture(
 ): ViewGesture {
   const unit = deltaMode === 1 ? 16 : deltaMode === 2 ? 240 : 1;
   // Ctrl-wheel is the pinch signal on Chromium/Firefox trackpads. Two-finger
-  // scrolling or a mouse wheel orbits; buttons remain an alternate zoom path.
+  // scrolling reports the opposite sign from touch centroid movement. Invert
+  // orbit only so fingers move the view in the same direction on both devices.
   return pinch
     ? {
         dx: 0,
@@ -45,8 +46,8 @@ export function wheelViewGesture(
         zoomRatio: Math.exp(Math.max(-0.3, Math.min(0.3, dy * unit * 0.008))),
       }
     : {
-        dx: Math.max(-100, Math.min(100, dx * unit)) * 0.7,
-        dy: Math.max(-100, Math.min(100, dy * unit)) * 0.7,
+        dx: Math.max(-100, Math.min(100, dx * unit)) * -0.7,
+        dy: Math.max(-100, Math.min(100, dy * unit)) * -0.7,
         twist: 0,
         zoomRatio: 1,
       };

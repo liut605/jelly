@@ -33,8 +33,18 @@ test("trackpad pinch changes distance only; scrolling orbits with bounded deltas
   assert.equal(pinch.dy, 0);
   const scroll = wheelViewGesture(20, 10, 0, false);
   assert.equal(scroll.zoomRatio, 1);
-  assert.equal(scroll.dx, 14);
-  assert.equal(scroll.dy, 7);
-  assert.equal(wheelViewGesture(1, 2, 1, false).dy, 22.4);
-  assert(wheelViewGesture(10000, 10000, 2, false).dy <= 70);
+  assert.equal(scroll.dx, -14);
+  assert.equal(scroll.dy, -7);
+  assert.equal(wheelViewGesture(1, 2, 1, false).dy, -22.4);
+  assert(wheelViewGesture(10000, 10000, 2, false).dy === -70);
+});
+
+test("desktop wheel orbit matches opposite-signed mobile finger travel", () => {
+  const touch = twoFingerGesture(
+    [p(0, 0), p(100, 0)],
+    [p(20, 10), p(120, 10)],
+  )!;
+  const wheel = wheelViewGesture(-20, -10, 0, false);
+  assert.equal(Math.sign(wheel.dx), Math.sign(touch.dx));
+  assert.equal(Math.sign(wheel.dy), Math.sign(touch.dy));
 });

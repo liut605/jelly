@@ -143,13 +143,14 @@ async function run() {
   wheel(30, 15);
   await wait();
   assert(
-    Math.abs(state().yaw - preWheel.yaw) > 0.05,
-    "Trackpad scroll did not orbit",
+    state().yaw > preWheel.yaw + 0.05,
+    "Trackpad scroll did not reverse to match mobile",
   );
   wheel(0, 30, true);
   await wait(850);
   const zoomed = state();
   assert(zoomed.distance > preWheel.distance, "Trackpad pinch did not zoom");
+  if (mobile) await click("button-zoom-toggle");
   await click("button-zoom-in");
   await wait(850);
   assert(
@@ -194,7 +195,11 @@ async function run() {
   pointer("pointerdown", 7, 40, 230);
   pointer("pointercancel", 7, 40, 230);
   assert(capture.size === 0, "Cancelled pointer retained capture");
-  await until(() => win.getComputedStyle(button("button-hand-mode")).color === "rgb(109, 27, 24)");
+  await until(
+    () =>
+      win.getComputedStyle(button("button-hand-mode")).color ===
+      "rgb(109, 27, 24)",
+  );
   const styles = win.getComputedStyle(button("button-hand-mode"));
   assert(styles.color === "rgb(109, 27, 24)", "Active text wrong color");
   assert(

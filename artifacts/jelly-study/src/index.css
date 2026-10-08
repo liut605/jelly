@@ -723,7 +723,7 @@ input:focus-visible {
   width: 295px;
   max-width: 26%;
   border-top: 1px solid #bdbbb1;
-  padding-top: 19px;
+  padding-top: var(--copy-rule-gap, 19px);
   color: #30332b;
   font-size: 15px;
   line-height: 1.6;
@@ -892,6 +892,7 @@ input:focus-visible {
 /* Tea-entry choreography: individual UI groups arrive from the right. Using
    translate preserves the toolbar's existing centering transform. */
 .playground-shell[data-entering="true"] .specimen-heading,
+.playground-shell[data-entering="true"] .specimen-next,
 .playground-shell[data-entering="true"] .selection,
 .playground-shell[data-entering="true"] .specimen-caption,
 .playground-shell[data-entering="true"] .physics-panel,
@@ -909,7 +910,10 @@ input:focus-visible {
   animation-delay: 180ms;
 }
 .playground-shell[data-entering="true"] .canvas-stage {
-  animation: playground-scene-enter 950ms ease both;
+  /* The last UI group finishes at 1030ms. Keep the simulation hidden
+     until 900ms, then reveal it as the controls settle into place. */
+  animation: playground-scene-enter 350ms ease 900ms both;
+  pointer-events: none;
 }
 .specimen-heading:focus {
   outline: none;
@@ -934,6 +938,7 @@ input:focus-visible {
 }
 @media (prefers-reduced-motion: reduce) {
   .playground-shell[data-entering="true"] .specimen-heading,
+  .playground-shell[data-entering="true"] .specimen-next,
   .playground-shell[data-entering="true"] .selection,
   .playground-shell[data-entering="true"] .specimen-caption,
   .playground-shell[data-entering="true"] .physics-panel,

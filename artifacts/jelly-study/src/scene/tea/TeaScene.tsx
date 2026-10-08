@@ -32,7 +32,7 @@ export default function TeaScene() {
   const pulseTimer = useRef<ReturnType<typeof setTimeout> | undefined>(
     undefined,
   );
-  const [status, setStatus] = useState("Loading tea objects…");
+  const [status, setStatus] = useState("");
   const [ready, setReady] = useState(false);
   const [attempt, setAttempt] = useState(0);
 
@@ -132,15 +132,10 @@ export default function TeaScene() {
     resizeObserver.observe(mount);
     resize();
     setReady(false);
-    setStatus("Loading tea objects…");
+    setStatus("");
     new GLTFLoader()
       .setMeshoptDecoder(MeshoptDecoder)
-      .loadAsync(teaSetUrl, (e) => {
-        if (!disposed && e.total)
-          setStatus(
-            `Loading tea objects · ${Math.round((e.loaded / e.total) * 100)}%`,
-          );
-      })
+      .loadAsync(teaSetUrl)
       .then((gltf) => {
         if (disposed) {
           disposeDocumentCamera(gltf.scene);
