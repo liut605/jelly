@@ -46,7 +46,13 @@ const specimenHeadings: Record<
 };
 type SimulationStatus = "checking" | "ready" | "still";
 
-function Study({ entering = false }: { entering?: boolean }) {
+function Study({
+  entering = false,
+  initialSpecimen = "peach",
+}: {
+  entering?: boolean;
+  initialSpecimen?: SpecimenId;
+}) {
   const headingRef = useRef<HTMLHeadingElement>(null);
   const [enteringNow, setEnteringNow] = useState(entering);
   useEffect(() => {
@@ -59,7 +65,7 @@ function Study({ entering = false }: { entering?: boolean }) {
     const timer = setTimeout(() => setEnteringNow(false), duration);
     return () => clearTimeout(timer);
   }, [entering]);
-  const [specimen, setSpecimen] = useState<SpecimenId>("peach");
+  const [specimen, setSpecimen] = useState<SpecimenId>(initialSpecimen);
   const currentSpecimen = specimens[specimen];
   const [specimenPhase, setSpecimenPhase] = useState<
     "idle" | "leaving" | "loading" | "entering"
@@ -609,7 +615,10 @@ export default function App() {
           <TeaLanding onEnter={enterPlayground} />
         </Suspense>
       ) : (
-        <Study entering />
+        <Study
+          entering
+          initialSpecimen={entered ? "dried-persimmon" : "peach"}
+        />
       )}
     </StudioHost>
   );
